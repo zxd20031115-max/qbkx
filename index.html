@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>情報科学 I 学习工作台</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">情報科学 I / 基本情報技術者</p>
+      <h1>学习工作台</h1>
+    </div>
+    <div class="status">
+      <span>8 回课件</span>
+      <span>章节图解</span>
+      <span>中日术语</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <aside class="sidebar" aria-label="章节导航">
+      <label class="searchbox">
+        <span>检索</span>
+        <input id="searchInput" type="search" placeholder="例：集合 / 論理演算 / CPU / フローチャート">
+      </label>
+      <nav id="moduleNav"></nav>
+    </aside>
+
+    <section class="workspace">
+      <section class="intro band">
+        <div>
+          <h2>把课件变成可查、可算、可画的复习页</h2>
+          <p>按 1-8 回课件整理，术语用日文原词配中文解释，重点补上集合与逻辑演算、逻辑回路、CPU 处理流程、流程图符号、存储与接口这些图解。</p>
+        </div>
+        <div class="quick-grid">
+          <button class="tool-jump" data-tool="visualAtlas">章节图解</button>
+          <button class="tool-jump" data-tool="baseTool">进制换算</button>
+          <button class="tool-jump" data-tool="logicTool">逻辑表</button>
+          <button class="tool-jump" data-tool="perfTool">性能计算</button>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Modules</p>
+            <h2>课程地图</h2>
+          </div>
+          <p id="resultCount"></p>
+        </div>
+        <div id="moduleCards" class="module-grid"></div>
+      </section>
+
+      <section class="band" id="visualAtlas">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Visual Atlas</p>
+            <h2>章节图解板</h2>
+          </div>
+          <p class="section-note">根据课件内容重画，方便复习，不直接搬 PPT 截图。</p>
+        </div>
+        <div id="visualCards" class="visual-grid"></div>
+      </section>
+
+      <section class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Glossary</p>
+            <h2>中日概念词典</h2>
+          </div>
+          <div class="chip-row" id="categoryFilters"></div>
+        </div>
+        <div id="glossary" class="glossary"></div>
+      </section>
+
+      <section class="band tools">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Practice</p>
+            <h2>计算与图解工具</h2>
+          </div>
+        </div>
+
+        <div class="tool-grid">
+          <article class="tool-panel" id="baseTool">
+            <h3>进制与补数</h3>
+            <div class="fields two">
+              <label>十进制整数 <input id="decInput" type="number" value="-7"></label>
+              <label>位宽 <input id="bitWidth" type="number" min="2" max="32" value="8"></label>
+            </div>
+            <div class="output-list" id="baseOutput"></div>
+            <div class="fields two">
+              <label>十进制小数 0&lt;x&lt;1 <input id="fracInput" type="number" step="0.001" value="0.625"></label>
+              <label>输出位数 <input id="fracBits" type="number" min="1" max="24" value="8"></label>
+            </div>
+            <div class="bit-strip" id="fracOutput"></div>
+          </article>
+
+          <article class="tool-panel" id="logicTool">
+            <h3>逻辑运算真值表</h3>
+            <div class="logic-switches">
+              <label><input type="checkbox" id="logicA"> A</label>
+              <label><input type="checkbox" id="logicB" checked> B</label>
+            </div>
+            <table class="truth-table" id="truthTable"></table>
+            <div class="gate-board">
+              <div class="gate">AND<br><strong id="andOut"></strong></div>
+              <div class="gate">OR<br><strong id="orOut"></strong></div>
+              <div class="gate">XOR<br><strong id="xorOut"></strong></div>
+              <div class="gate">NAND<br><strong id="nandOut"></strong></div>
+            </div>
+          </article>
+
+          <article class="tool-panel" id="flowTool">
+            <h3>流程图符号速查</h3>
+            <div id="flowSymbolGrid" class="symbol-grid"></div>
+            <p class="note">课后题里的最大公约数、二进制小数输出、栈操作，都可以先拆成这些符号再写算法。</p>
+          </article>
+
+          <article class="tool-panel" id="perfTool">
+            <h3>CPU / 缓存性能</h3>
+            <div class="fields two">
+              <label>时钟频率 GHz <input id="clockGhz" type="number" step="0.1" value="4.0"></label>
+              <label>平均 CPI <input id="cpi" type="number" step="0.1" value="2.5"></label>
+            </div>
+            <div class="output-list" id="cpuOutput"></div>
+            <div class="fields three">
+              <label>缓存 ns <input id="cacheNs" type="number" value="10"></label>
+              <label>主存 ns <input id="memoryNs" type="number" value="100"></label>
+              <label>命中率 % <input id="hitRate" type="number" value="90"></label>
+            </div>
+            <div class="output-list" id="cacheOutput"></div>
+          </article>
+
+          <article class="tool-panel">
+            <h3>通信帧率估算</h3>
+            <div class="fields three">
+              <label>宽 <input id="imgW" type="number" value="1920"></label>
+              <label>高 <input id="imgH" type="number" value="1080"></label>
+              <label>Mbps <input id="mbps" type="number" value="100"></label>
+            </div>
+            <div class="output-list" id="ioOutput"></div>
+          </article>
+
+          <article class="tool-panel">
+            <h3>系统稼働率</h3>
+            <div class="fields two">
+              <label>稼働时间 <input id="uptime" type="number" value="1500"></label>
+              <label>维护时间 <input id="downtime" type="number" value="500"></label>
+            </div>
+            <div class="output-list" id="availOutput"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Review</p>
+            <h2>高频题型速记</h2>
+          </div>
+        </div>
+        <div id="problemBank" class="problem-grid"></div>
+      </section>
+
+      <section class="band" id="questionBank">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Question Bank</p>
+            <h2>讲义原题库</h2>
+          </div>
+          <p class="section-note">从你给的课件、練習問題、課題 PDF 中整理。老师说会抽题的话，这块优先背。</p>
+        </div>
+        <div class="chip-row" id="questionFilters"></div>
+        <div id="questionList" class="question-list"></div>
+      </section>
+
+      <section class="band">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Extra</p>
+            <h2>类似题与官方题库入口</h2>
+          </div>
+        </div>
+        <div id="extraPractice" class="problem-grid"></div>
+        <div class="resource-row">
+          <a href="https://www.ipa.go.jp/shiken/mondai-kaiotu/index.html" target="_blank" rel="noreferrer">IPA 官方过去问题</a>
+          <a href="https://www.ipa.go.jp/shiken/syllabus/henkou/2022/20221226.html" target="_blank" rel="noreferrer">IPA FE 样本问题集说明</a>
+          <a href="https://www.ipa.go.jp/shiken/syllabus/henkou/2022/ssf7ph000000h5tb-att/fe_kamoku_a_set_sample_qs.pdf" target="_blank" rel="noreferrer">科目A样本问题 PDF</a>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
