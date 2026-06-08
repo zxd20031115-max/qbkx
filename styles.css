@@ -819,6 +819,39 @@ h3 { font-size: 18px; line-height: 1.25; }
   font-weight: 800;
 }
 
+.venn-svg-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  text-align: center;
+  background: #fff;
+}
+
+.venn-svg {
+  width: 100%;
+  min-height: 150px;
+}
+
+.venn-svg text {
+  fill: var(--ink);
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.venn-svg-card strong {
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.venn-svg-card em {
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+}
+
 .vm-universe {
   position: relative;
   height: 92px;
@@ -863,6 +896,84 @@ h3 { font-size: 18px; line-height: 1.25; }
   background: rgba(200,93,77,.42);
 }
 
+.venn-mini.diff .vm-a {
+  background: rgba(39,111,191,.2);
+}
+
+.venn-mini.diff .vm-universe::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 52px);
+  top: 17px;
+  width: 36px;
+  height: 58px;
+  border-radius: 50% 0 0 50%;
+  background: rgba(200,93,77,.42);
+}
+
+.m2-atlas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.m2-atlas section {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+  background: #fff;
+}
+
+.m2-atlas h4 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--blue);
+}
+
+.venn-mini-row-wide {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.unit-board,
+.conversion-board {
+  display: grid;
+  gap: 8px;
+}
+
+.unit-board {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.conversion-board {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.unit-board div,
+.conversion-board div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-height: 76px;
+  padding: 12px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: #fbfcfc;
+}
+
+.unit-board strong,
+.conversion-board strong {
+  color: var(--ink);
+}
+
+.unit-board span,
+.conversion-board span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
 .priority-board,
 .nand-build {
   display: grid;
@@ -897,6 +1008,34 @@ h3 { font-size: 18px; line-height: 1.25; }
 .visual-card-large .priority-board,
 .visual-card-large .nand-build {
   gap: 12px;
+}
+
+.visual-card-large .vm-universe {
+  height: 120px;
+}
+
+.visual-card-large .vm-a,
+.visual-card-large .vm-b {
+  top: 24px;
+  width: 72px;
+  height: 72px;
+}
+
+.visual-card-large .vm-a { left: calc(50% - 62px); }
+.visual-card-large .vm-b { right: calc(50% - 62px); }
+
+.visual-card-large .venn-mini.inter .vm-universe::after {
+  left: calc(50% - 26px);
+  top: 25px;
+  width: 52px;
+  height: 70px;
+}
+
+.visual-card-large .venn-mini.diff .vm-universe::after {
+  left: calc(50% - 62px);
+  top: 24px;
+  width: 43px;
+  height: 72px;
 }
 
 .visual-card-large .law-strip span {
@@ -1159,6 +1298,9 @@ h3 { font-size: 18px; line-height: 1.25; }
   .system-map,
   .cpu-cycle,
   .bit-ladder,
+  .m2-atlas,
+  .unit-board,
+  .conversion-board,
   .lecture-flow,
   .venn-mini-row,
   .gate-diagram,

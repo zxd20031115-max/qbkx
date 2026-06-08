@@ -660,7 +660,7 @@ function renderVisuals(query = "") {
   const q = normalize(query);
   const filtered = modules.filter(m => normalize([m.week, m.title, m.summary, ...m.tags].join(" ")).includes(q));
   $("visualCards").innerHTML = filtered.map(m => `
-    <article class="visual-card ${["m3", "m4", "m8"].includes(m.id) ? "visual-card-large" : ""}" data-module="${m.id}">
+    <article class="visual-card ${["m2", "m3", "m4", "m8"].includes(m.id) ? "visual-card-large" : ""}" data-module="${m.id}">
       <header>
         <div>
           <p class="eyebrow">${m.week}</p>
@@ -785,17 +785,49 @@ function visualHtml(id) {
       <p class="note">机器人系统不是单个机械臂，而是“环境→传感→处理→执行→环境变化”的闭环。</p>
     `,
     m2: `
-      <div class="venn-board">
-        <div class="venn a">A</div><div class="venn b">B</div>
-        <div class="venn-label union">A+B<br>并集 OR</div>
-        <div class="venn-label inter">A·B<br>交集 AND</div>
-        <div class="venn-label diff">A·B̄<br>差集</div>
+      <div class="m2-atlas">
+        <section>
+          <h4>集合と論理の入口</h4>
+          <div class="venn-mini-row venn-mini-row-wide">
+            ${vennSvg("A", "集合 A", "a")}
+            ${vennSvg("A+B", "和集合 / 并集 / OR", "union")}
+            ${vennSvg("A·B", "積集合 / 交集 / AND", "inter")}
+            ${vennSvg(`A·<span class="over">B</span>`, "差集合 / A 且非 B", "diff")}
+          </div>
+        </section>
+        <section>
+          <h4>データ単位</h4>
+          <div class="unit-board">
+            <div><strong>bit</strong><span>0 或 1</span></div>
+            <div><strong>byte</strong><span>8 bit</span></div>
+            <div><strong>hex 1位</strong><span>4 bit</span></div>
+            <div><strong>RGB 1 pixel</strong><span>24 bit</span></div>
+          </div>
+        </section>
+      </div>
+      <div class="conversion-board">
+        <div>
+          <strong>10進整数 → 2進数</strong>
+          <span>2で割り，余りを下から読む</span>
+        </div>
+        <div>
+          <strong>2進数 → 10進数</strong>
+          <span>各桁 × 2ⁿ を足す</span>
+        </div>
+        <div>
+          <strong>16進数 → 2進数</strong>
+          <span>1桁を4bitに置き換える</span>
+        </div>
+        <div>
+          <strong>小数 → 2進小数</strong>
+          <span>×2して整数部を並べる</span>
+        </div>
       </div>
       <div class="bit-ladder">
-        <div><strong>1 byte</strong><span>8 bit</span></div>
-        <div><strong>1 hex</strong><span>4 bit</span></div>
-        <div><strong>左移 n</strong><span>×2ⁿ</span></div>
-        <div><strong>补数</strong><span>取反 + 1</span></div>
+        <div><strong>2の補数</strong><span>取反 + 1</span></div>
+        <div><strong>論理左シフト</strong><span>×2ⁿ</span></div>
+        <div><strong>論理右シフト</strong><span>÷2ⁿ</span></div>
+        <div><strong>丸め誤差</strong><span>有限 bit で近似</span></div>
       </div>
     `,
     m3: `
@@ -806,10 +838,10 @@ function visualHtml(id) {
         <div><strong>MIL記号</strong><span>逻辑回路图</span></div>
       </div>
       <div class="venn-mini-row">
-        ${vennMini("A", "集合 A", "a")}
-        ${vennMini("Ā", "補集合 / 补集", "not")}
-        ${vennMini("A+B", "和集合 / 并集 / OR", "union")}
-        ${vennMini("A·B", "積集合 / 交集 / AND", "inter")}
+        ${vennSvg("A", "集合 A", "a")}
+        ${vennSvg(`<span class="over">A</span>`, "補集合 / 补集 / NOT", "not")}
+        ${vennSvg("A+B", "和集合 / 并集 / OR", "union")}
+        ${vennSvg("A·B", "積集合 / 交集 / AND", "inter")}
       </div>
       <div class="priority-board">
         <div><strong>四则演算</strong><span>() → ×÷ → +−</span></div>
@@ -970,6 +1002,30 @@ function vennMini(label, caption, mode) {
         <span class="vm-a">A</span>
         <span class="vm-b">B</span>
       </div>
+      <strong>${label}</strong>
+      <em>${caption}</em>
+    </div>
+  `;
+}
+
+function vennSvg(label, caption, mode) {
+  const fills = {
+    a: `<circle cx="82" cy="70" r="42" fill="rgba(39,111,191,.34)"/>`,
+    not: `<path d="M8 8 H196 V132 H8 Z M82 28 A42 42 0 1 0 82 112 A42 42 0 1 0 82 28 Z" fill="rgba(200,93,77,.30)" fill-rule="evenodd"/>`,
+    union: `<circle cx="82" cy="70" r="42" fill="rgba(39,111,191,.34)"/><circle cx="122" cy="70" r="42" fill="rgba(31,122,93,.34)"/>`,
+    inter: `<path d="M102 35 C116 43 124 56 124 70 C124 84 116 97 102 105 C88 97 80 84 80 70 C80 56 88 43 102 35 Z" fill="rgba(200,93,77,.58)"/>`,
+    diff: `<path d="M82 28 C68 28 56 34 48 44 C39 55 36 68 39 82 C43 100 60 112 82 112 C89 112 96 110 102 107 C88 98 80 84 80 70 C80 56 88 42 102 33 C96 30 89 28 82 28 Z" fill="rgba(200,93,77,.58)"/>`
+  };
+  return `
+    <div class="venn-svg-card">
+      <svg class="venn-svg" viewBox="0 0 204 140" role="img" aria-label="${caption}">
+        <rect x="8" y="8" width="188" height="124" rx="8" fill="#f6f8f8" stroke="#d9e0e5"/>
+        ${fills[mode] || ""}
+        <circle cx="82" cy="70" r="42" fill="none" stroke="#276fbf" stroke-width="3"/>
+        <circle cx="122" cy="70" r="42" fill="none" stroke="#1f7a5d" stroke-width="3"/>
+        <text x="62" y="72" text-anchor="middle">A</text>
+        <text x="142" y="72" text-anchor="middle">B</text>
+      </svg>
       <strong>${label}</strong>
       <em>${caption}</em>
     </div>
